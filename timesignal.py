@@ -21,15 +21,15 @@ wiringpi.pwmSetClock(3)		# divisor (base clock == 19.2MHz)
 # divisorが小さい方が正確な周波数を設定できるけど,
 # range (= clock/divisor/freq) が32767を超えるとだめっぽい
 
-clock = 19200 * 1000 / 3
+clock = 19200 * 1000 // 3
 freq = 440
 
 for i in range(4):
   # 波長   range = clock / freq  (4回目は1オクターブ上)
   # 山の幅 data  = range / 2     (duty cycle == 50%)
-  range = clock / freq / (1 if i < 3 else 2)
+  range = clock // freq // (1 if i < 3 else 2)
   wiringpi.pwmSetRange(range)
-  wiringpi.pwmWrite(SPEAKER, range / 2)
+  wiringpi.pwmWrite(SPEAKER, range // 2)
 
   # 0.1秒待ってください (4回目は1秒)
   wiringpi.delay(100 if i < 3 else 1000)
