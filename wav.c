@@ -67,6 +67,35 @@ static Bool wavCheckMagic(Wav *wav, const char *magic)
 }
 
 /*
+ * 指定したチャンクが現れるまでスキップする
+ */
+static Bool wavSkipChunkUntil(Wav *wav, const char *chunkName)
+{
+  static char buf[4];
+  size_t chunkLen;
+  unsigned int i;
+
+  while (True) {
+    if (fread(buf, 1, sizeof(buf), wav->fp) < sizeof(buf)) {
+      return False;
+    }
+#   if DEBUG
+    printf("magic: %c%c%c%c\n", buf[0], buf[1], buf[2], buf[3]);
+#   endif
+    if (strncmp(buf, chunkName, sizeof(buf)) == 0) {
+      return True;
+    }
+    chunkLen = wavGetInt32(wav);
+    /* skip */
+    for (i = 0; i < chunkLen; i++) {
+      if (getc(wav->fp) == EOF) {
+        return False;
+      }
+    }
+  }
+}
+
+/*
  * wavファイルのヘッダから情報を取り出す
  */
 static void wavCheckHeader(Wav *wav)
@@ -119,7 +148,7 @@ static void wavCheckHeader(Wav *wav)
     getc(wav->fp);
   }
 
-  valid &= wavCheckMagic(wav, "data");
+  valid &= wavSkipChunkUntil(wav, "data");
   if (!valid) {
     fprintf(stderr, "Not a supported WAV file\n");
     exit(-1);
