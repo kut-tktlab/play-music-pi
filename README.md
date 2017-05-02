@@ -44,3 +44,18 @@ Python2でもPython3でも実行できる。
 $ make
 $ sudo ./playmusic
 ```
+
+### WAVファイルを鳴らすプログラム
+
+WiringPiはPWMのFIFOを扱えないようなので，すべて自前実装。
+
+```sh
+$ make playwav
+$ sudo ./playwav wav/groove.wav
+```
+
+モノラル, 1チャンネル, 8ビット リニアPCM のWAVファイルのみ扱える。
+
+wav/goove.wav は，
+[Minim](https://github.com/ddf/Minim)の
+examples/AudioPlayer/* などに同梱されている groove.mp3 をWAVに変換したもの。
