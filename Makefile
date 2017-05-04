@@ -11,7 +11,7 @@ playmusic: playmusic.o $(music_data).o
 	$(CC) $(LDFLAGS) $(LIBS) $+ -o $@
 
 $(music_data).o: note.s
-note.s: note.pl
+note.s: mknote.py
 	./$< >$@
 
 timesig:
