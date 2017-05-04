@@ -36,6 +36,6 @@ for phase in [1, 2]:
       oct = oct + 1
 
 # afterword
-print("\t.global\tn_utick")
+print("\t.global\ttick_len")
 print("\t.equ\tTIMER_HZ, (1000 * 1000)")
-print("n_utick:\t.word\tTIMER_HZ * 60 / tempo / tick")
+print("tick_len:\t.word\tTIMER_HZ * 60 / tempo / tick")

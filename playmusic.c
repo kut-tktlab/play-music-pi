@@ -7,7 +7,7 @@
 
 extern unsigned char music_data[];	/* score data */
 extern unsigned int  note_table[];	/* number to wave length */
-extern unsigned int  n_utick;		/* clock count per 4*32-th note */
+extern unsigned int  tick_len;		/* clock count per 4*32-th note */
 
 int main()
 {
@@ -33,14 +33,14 @@ int main()
     pwmWrite(SPEAKER, range / 2);
 
     for (; note_len > 0; note_len--) {
-      delayMicroseconds(n_utick);
+      delayMicroseconds(tick_len);
     }
 
     /* Stop sounding */
     pwmWrite(SPEAKER, 0);
 
     for (; rest_len > 0; rest_len--) {
-      delayMicroseconds(n_utick);
+      delayMicroseconds(tick_len);
     }
   }
   return 0;
