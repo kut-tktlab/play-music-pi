@@ -59,3 +59,11 @@ $ sudo ./playwav wav/groove.wav
 wav/goove.wav は，
 [Minim](https://github.com/ddf/Minim)の
 examples/AudioPlayer/* などに同梱されている groove.mp3 をWAVに変換したもの。
+
+### 和音を鳴らすプログラム
+
+WAVファイルを出力する。
+
+```sh
+$ ./organ.py >joy.wav
+```
