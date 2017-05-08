@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 
@@ -24,19 +25,33 @@ void pwmWaitFifoEmpty();
 void delayMicroseconds(unsigned int usec);
 
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
   Wav wav;
   unsigned int range;
   int c;
+  char *argv0 = argv[0];
+  unsigned int pwmDiv = PWM_CLOCK_DIV;
+
+  /* Set up the clock divider of PWM */
+  if (argc >= 2 && argv[1][0] == '-') {
+    if (strcmp(argv[1], "-div") == 0 && argc >= 3) {
+      pwmDiv = atoi(argv[2]);
+      argc -= 2;
+      argv += 2;
+    } else {
+      fprintf(stderr, "Usage: %s [-div d] wavfile\n", argv0);
+      exit(1);
+    }
+  }
 
   /* Open a wav file */
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s wavfile\n", argv[0]);
+  if (argc < 2) {
+    fprintf(stderr, "Usage: %s [-div d] wavfile\n", argv0);
     exit(1);
   }
   wav = wavOpen(argv[1]);
-  range = PWM_BASECLOCK / PWM_CLOCK_DIV / wav.frequency;
+  range = PWM_BASECLOCK / pwmDiv / wav.frequency;
 
   /* Setting up */
   if (setupGpio() == -1) {
@@ -45,7 +60,7 @@ int main(int argc, char *argv[])
   }
 
   pinModePwm(SPEAKER);
-  pwmSetClock(PWM_CLOCK_DIV);
+  pwmSetClock(pwmDiv);
   pwmSetModeBalanced();
   pwmSetRange(range);
 
