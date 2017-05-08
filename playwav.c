@@ -159,9 +159,7 @@ void pinModePwm(int pin)
 void pwmSetModeBalanced()
 {
   *(pwm + PWM_CTL) = PWM_CLRFIFO;
-  delayMicroseconds(10);
   *(pwm + PWM_CTL) = PWM2_USEFIFO | PWM2_ENABLE;
-  delayMicroseconds(10);
 }
 
 /* Set PWM clock divider.  */
