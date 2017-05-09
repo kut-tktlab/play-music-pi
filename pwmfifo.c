@@ -32,8 +32,10 @@
 #define PWM_FIF1	(0x18 /sizeof(uint32_t))
 #define PWM_RNG2	(0x20 /sizeof(uint32_t))
 #define PWM_DAT2	(0x24 /sizeof(uint32_t))
+#define PWM2_MSMODE	(1<<15)
 #define PWM2_USEFIFO	(1<<13)
 #define PWM2_ENABLE	(1<<8)
+#define PWM1_MSMODE	(1<<7)
 #define PWM_CLRFIFO	(1<<6)
 #define PWM1_USEFIFO	(1<<5)
 #define PWM1_ENABLE	(1<<0)
@@ -115,6 +117,15 @@ void pwmSetModeBalanced()
   *(pwm + PWM_CTL) =
     pwmfifo_pin == 18 ? (PWM1_USEFIFO | PWM1_ENABLE)
                       : (PWM2_USEFIFO | PWM2_ENABLE);
+}
+
+/* Set the PWM to the mark:space mode.  */
+void pwmSetModeMS()
+{
+  *(pwm + PWM_CTL) = PWM_CLRFIFO;
+  *(pwm + PWM_CTL) =
+    pwmfifo_pin == 18 ? (PWM1_USEFIFO | PWM1_ENABLE | PWM1_MSMODE)
+                      : (PWM2_USEFIFO | PWM2_ENABLE | PWM2_MSMODE);
 }
 
 /* Set PWM clock divider.  */
