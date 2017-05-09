@@ -48,8 +48,8 @@ int main(int argc, char **argv)
   }
 
   pinModePwm(SPEAKER);
-  pwmSetClock(pwmDiv);
   pwmSetModeBalanced();
+  pwmSetClock(pwmDiv);
   pwmSetRange(range);
 
   /* Play music */
