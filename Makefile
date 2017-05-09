@@ -16,7 +16,7 @@ note.s: mknote.py
 
 timesig:
 
-playwav: playwav.o wav.o
+playwav: playwav.o pwmfifo.o wav.o
 	$(CC) $+ -o $@
 
 .PHONY: clean
