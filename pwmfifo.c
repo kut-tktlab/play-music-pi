@@ -174,7 +174,6 @@ void pwmWriteFifo(unsigned int byte)
       if (err != 0) { *(pwm + PWM_STA) = err; }
     }
     *(pwm + PWM_FIF1) = byte;
-    delayMicroseconds(10);
 }
 
 /* Wait until the FIFO becomes empty. */
