@@ -1,3 +1,4 @@
+OBJCOPY = arm-none-eabi-objcopy
 CFLAGS = -W -Wall
 LIBS = -lwiringPi
 LDFLAGS = $(LIBS)
@@ -21,6 +22,12 @@ playwav: playwav.o pwmfifo.o wav.o
 wavutil: wav.c
 	$(CC) $(CFLAGS) -DSTANDALONE $+ -o $@
 
+%.o: %.bin
+	$(OBJCOPY) -I binary -O elf32-littlearm $< $@
+%.bin: %.wav wavutil
+	dd if=$< bs=`./wavutil $< | awk '/^filePos/{print $$3}'` skip=1 of=$@
+
 .PHONY: clean
 clean:
 	$(RM) *.o a.out timesig playmusic note.s *.pyc playwav wavutil
+	$(RM) wav/*.o wav/*.bin
