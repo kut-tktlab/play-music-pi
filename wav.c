@@ -9,6 +9,10 @@
 
 #include "wav.h"
 
+#ifdef STANDALONE
+# define DEBUG  1
+#endif
+
 enum Bool {
   False = 0, True = 1
 };
@@ -156,6 +160,7 @@ static void wavCheckHeader(Wav *wav)
   dataLen = wavGetInt32(wav);
 # if DEBUG
   printf("dataLen     = %ld\n", dataLen);
+  printf("filePos     = %ld\n", ftell(wav->fp));
 # endif
 
   wav->frequency = frequency;
@@ -188,10 +193,11 @@ Wav wavOpen(const char *filename)
   return wavForOpenedFile(fp);
 }
 
-#if 0
+#ifdef STANDALONE
 int main(int argc, char *argv[])
 {
   Wav wav;
+  int dataLen, n;
   int c;
 
   if (argc > 2) {
@@ -204,10 +210,17 @@ int main(int argc, char *argv[])
     wav = wavForOpenedFile(stdin);
   }
 
+  dataLen = wav.dataLen;
+  n = 0;
+
+  printf("bytes:\n");
   while ((c = wavGetc(&wav)) != EOF) {
-    if (wav.remain < 3) {
+    if (n < 3 || wav.remain < 3) {
       printf("%d\n", c);
+    } else if (n == 3) {
+      printf("...\n");
     }
+    n++;
   }
 
   return 0;

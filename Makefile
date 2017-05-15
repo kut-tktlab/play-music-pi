@@ -18,7 +18,9 @@ timesig:
 
 playwav: playwav.o pwmfifo.o wav.o
 	$(CC) $+ -o $@
+wavutil: wav.c
+	$(CC) $(CFLAGS) -DSTANDALONE $+ -o $@
 
 .PHONY: clean
 clean:
-	$(RM) *.o a.out timesig playmusic note.s *.pyc playwav
+	$(RM) *.o a.out timesig playmusic note.s *.pyc playwav wavutil
