@@ -128,7 +128,7 @@ static void wavCheckHeader(Wav *wav)
   bitPerSample = wavGetInt16(wav);
 
 # if DEBUG
-  printf("chunkLen    = %ld\n", chunkLen);
+  printf("chunkLen    = %zd\n", chunkLen);
   printf("format      = %d\n", format);
   printf("nChannel    = %d\n", nChannel);
   printf("frequency   = %d\n", frequency);
@@ -159,7 +159,7 @@ static void wavCheckHeader(Wav *wav)
   }
   dataLen = wavGetInt32(wav);
 # if DEBUG
-  printf("dataLen     = %ld\n", dataLen);
+  printf("dataLen     = %zd\n", dataLen);
   printf("filePos     = %ld\n", ftell(wav->fp));
 # endif
 
@@ -197,7 +197,7 @@ Wav wavOpen(const char *filename)
 int main(int argc, char *argv[])
 {
   Wav wav;
-  int dataLen, n;
+  int n;
   int c;
 
   if (argc > 2) {
@@ -210,7 +210,6 @@ int main(int argc, char *argv[])
     wav = wavForOpenedFile(stdin);
   }
 
-  dataLen = wav.dataLen;
   n = 0;
 
   printf("bytes:\n");
