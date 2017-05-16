@@ -39,8 +39,6 @@ int main()
   }
 
   pinModePwm(SPEAKER);
-  pwmSetModeMS();	/* これがないと初期化に失敗することがある */
-  pwmSetClock(pwmDiv);	/* 〃 */
   pwmSetModeBalanced();
   pwmSetClock(pwmDiv);
   pwmSetRange(range);
