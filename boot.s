@@ -3,8 +3,8 @@
 _start:
 
 	@ 音を鳴らすプログラムはキャッシュがoffでも動く.
-	@ データが大きいと(>2MB?) .bssの初期化でhangupする.
-.if 0
+	@ (ただし48kHzの場合はキャッシュonの方が音がよいようだ.)
+.if 1
 	@ 起動時はキャッシュがoffになっている.
 	@ さらにRPi3は起動時にHYPモードになっており, SVCモードに
 	@ 遷移しないとキャッシュの設定が有効にならない.
@@ -69,16 +69,16 @@ _start:
 	orr	r0, r0, #0x4		@ enable data cache
 	orr	r0, r0, #0x1		@ enable mmu
 	mcr	p15, 0, r0, c1, c0, 0	@ write back
+.endif
 
 	@ initialize .bss
-	ldr	r0, =__bss_start__
+	ldr	r0, =__bss_start__	@ 4バイト境界でないとhangupするので注意
 	ldr	r1, =__bss_end__
 	mov	r2, #0
 	b	2f
 1:	str	r2, [r0], #4
 2:	cmp	r0, r1
 	blo	1b
-.endif
 
 	@ initialize the stack pointer
 	ldr	sp, =0x8000

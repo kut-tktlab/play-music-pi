@@ -50,6 +50,8 @@ wavutil: wav.c
 	--rename-section .data=.rodata,alloc,load,readonly,data,contents $@
 %.bin: %.wav wavutil
 	dd if=$< bs=$(shell ./wavutil $< | awk '/^filePos/{print $$3}') skip=1 of=$@
+	sz=`wc -c <$@`; pad=`expr '(' 4 - $$sz % 4 ')' % 4`; \
+	if [ $$pad != 0 ]; then head -c $$pad /dev/zero >>$@; fi
 
 .PHONY: clean
 clean:
