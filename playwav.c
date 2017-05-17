@@ -9,8 +9,13 @@
 #define SPEAKER  19
 
 /* clock for PWM */
-#define PWM_BASECLOCK	19200000
-#define PWM_CLOCK_DIV	2
+#if NOT_USE_PLL
+# define PWM_BASECLOCK	19200000		/* oscillator */
+# define PWM_CLOCK_DIV	2			/* minimum */
+#else
+# define PWM_BASECLOCK	(500 * 1000 * 1000)	/* PLLD */
+# define PWM_CLOCK_DIV	20			/* there is 25MHz cap? */
+#endif
 
 
 int main(int argc, char **argv)
