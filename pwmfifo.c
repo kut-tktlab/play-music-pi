@@ -23,6 +23,12 @@
 #define PWMCLK_CTL	(0xa0 /sizeof(uint32_t))
 #define PWMCLK_DIV	(0xa4 /sizeof(uint32_t))
 #define PWMCLK_PASSWD	0x5a000000
+#define PWMCLK_ENABLE	0x10
+#if NOT_USE_PLL
+# define PWMCLK_SRC	0x1	/* oscillator */
+#else
+# define PWMCLK_SRC	0x6	/* PLLD */
+#endif
 
 #define PWM_BASE	(0x0020c000 + PERIPHERAL_BASE)
 #define PWM_CTL		(0x00 /sizeof(uint32_t))
@@ -145,7 +151,7 @@ void pwmSetClock(unsigned int divider)
   *(pwm + PWM_CTL) = pwmctl;
 
   /* Stop the clock */
-  *(clock + PWMCLK_CTL) = PWMCLK_PASSWD|0x1;	/* enable=0, osc */
+  *(clock + PWMCLK_CTL) = PWMCLK_PASSWD|PWMCLK_SRC;
   delayMicroseconds(110);		/* cf. wiringPi.c */
 
   /* Wait while busy */
@@ -155,7 +161,7 @@ void pwmSetClock(unsigned int divider)
 
   /* Set the divider */
   *(clock + PWMCLK_DIV) = (PWMCLK_PASSWD | (divider << 12));
-  *(clock + PWMCLK_CTL) = PWMCLK_PASSWD|0x11;	/* enable=1, osc */
+  *(clock + PWMCLK_CTL) = PWMCLK_PASSWD|PWMCLK_SRC|PWMCLK_ENABLE;
   delayMicroseconds(110);
 
   /* Set the PWM control register again */
