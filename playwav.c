@@ -14,7 +14,7 @@
 # define PWM_CLOCK_DIV	2			/* minimum */
 #else
 # define PWM_BASECLOCK	(500 * 1000 * 1000)	/* PLLD */
-# define PWM_CLOCK_DIV	20			/* there is 25MHz cap? */
+# define PWM_CLOCK_DIV	2			/* minimum */
 #endif
 
 
